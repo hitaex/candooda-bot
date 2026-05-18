@@ -1605,6 +1605,17 @@ client.on(Events.UserUpdate, async (oldUser, newUser) => {
     break;
   }
 });
+// custom replies section
+
+client.on('messageCreate', (message) => {
+  if (message.author.bot) return; // Ignore bots
+
+  if (message.content.includes('😡')) {
+    message.reply('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgSA5Y9bgTXp94O7Fp2NXA5-2NonoH-6OW1Q&s');
+  }
+});
+
+
 
 // ================================================================
 //  GRACEFUL SHUTDOWN
