@@ -15,6 +15,11 @@ const {
 const { startRoundRoulette, getRandomDarkHexCode } = require('./functions');
 const { sendDM } = require('./dm');
 
+/** Prevents two lobbies from racing when the same prefix command fires twice. */
+const startingGuilds = new Set();
+/** Same Discord message must not start roulette twice (duplicate events). */
+const seenPrefixMessages = new Set();
+
 function rouletteCanHost(member) {
   return member.permissions.has(PermissionFlagsBits.ManageEvents);
 }
@@ -75,23 +80,40 @@ async function handleRouletteSlash(interaction) {
     await interaction.editReply({ content: ':x: | يوجد جولة تعمل الان بالفعل' });
     return true;
   }
+  if (startingGuilds.has(guildId)) {
+    await interaction.editReply({ content: ':x: | جاري بدء اللعبة بالفعل، انتظر لحظة' });
+    return true;
+  }
 
-  const gameId = Date.now();
-  const startAt = Math.floor((Date.now() + waitingTime * 1000) / 1000);
-  const game = createGame(guildId, gameId, channel.id, maxPlayers);
-  const rows = buildLobbyRows(game.suffix, game);
+  startingGuilds.add(guildId);
+  let game;
+  try {
+    if (getGame(guildId)) {
+      await interaction.editReply({ content: ':x: | يوجد جولة تعمل الان بالفعل' });
+      return true;
+    }
 
-  // Edit the deferred reply with the lobby embed + buttons.
-  await interaction.editReply({
-    embeds: [lobbyEmbed([], startAt)],
-    components: rows.first,
-  });
-  const mainMsg = await interaction.fetchReply();
-  game.messages.main = mainMsg.id;
+    const gameId = Date.now();
+    const startAt = Math.floor((Date.now() + waitingTime * 1000) / 1000);
+    game = createGame(guildId, gameId, channel.id, maxPlayers);
+    const rows = buildLobbyRows(game.suffix, game);
 
-  if (rows.second.length) {
-    const extraMsg = await channel.send({ components: rows.second });
-    game.messages.extra = extraMsg.id;
+    await interaction.editReply({
+      embeds: [lobbyEmbed([], startAt)],
+      components: rows.first,
+    });
+    const mainMsg = await interaction.fetchReply();
+    game.messages.main = mainMsg.id;
+
+    if (rows.second.length) {
+      const extraMsg = await channel.send({
+        content: '⬆️ أزرار إضافية للانضمام',
+        components: rows.second,
+      });
+      game.messages.extra = extraMsg.id;
+    }
+  } finally {
+    startingGuilds.delete(guildId);
   }
 
   const collector = trackCollector(game, channel.createMessageComponentCollector({
@@ -210,6 +232,10 @@ async function handleRouletteSlash(interaction) {
 }
 
 async function handleRoulettePrefix(message, cmdName) {
+  if (seenPrefixMessages.has(message.id)) return true;
+  seenPrefixMessages.add(message.id);
+  setTimeout(() => seenPrefixMessages.delete(message.id), 60_000);
+
   let replyMsg;
   const shim = {
     commandName: cmdName,
@@ -225,7 +251,8 @@ async function handleRoulettePrefix(message, cmdName) {
       if (replyMsg) {
         replyMsg = await replyMsg.edit(body).catch(() => replyMsg);
       } else {
-        replyMsg = await message.reply({ ...body, allowedMentions: { repliedUser: false } }).catch(() => null);
+        // channel.send (not message.reply) — one lobby message; avoids duplicate reply chains
+        replyMsg = await message.channel.send(body).catch(() => null);
       }
       return replyMsg;
     },

@@ -48,11 +48,10 @@ function register(client) {
     }
 
     const content = message.content.toLowerCase().replace(/\s{2,}/g, ' ').trim();
-    const { prefix, rouletteNames, stopNames } = ROULETTE_CFG;
-    if (!content.startsWith(prefix)) return;
+    const { prefix, rouletteNames, stopNames, resolvePrefixCommand } = ROULETTE_CFG;
 
-    const cmdName = content.slice(prefix.length).split(/\s+/)[0];
-    if (!rouletteNames.includes(cmdName) && !stopNames.includes(cmdName)) return;
+    const cmdName = resolvePrefixCommand(content, prefix, [...rouletteNames, ...stopNames]);
+    if (!cmdName) return;
 
     await handleRoulettePrefix(message, cmdName);
   });

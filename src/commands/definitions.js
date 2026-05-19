@@ -116,7 +116,7 @@ const commands = [
       .addUserOption(o => o.setName('to').setDescription('Recipient').setRequired(true))
       .addIntegerOption(o => o.setName('amount').setDescription('Points to move (default 1)').setMinValue(1))),
 
-  ...ROULETTE_CFG.rouletteNames.map(name =>
+  ...ROULETTE_CFG.slashRouletteNames.map(name =>
     new SlashCommandBuilder()
       .setName(name).setDescription('بدا فعالية لعبة روليت').setDMPermission(false),
   ),
