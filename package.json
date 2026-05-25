@@ -12,7 +12,8 @@
   "dependencies": {
     "discord.js":     "^14.14.1",
     "dotenv":         "^16.4.5",
-    "roulette-image": "^0.1.8"
+    "roulette-image": "^0.1.8",
+    "puppeteer-real-browser": "^1.4.0"
   },
   "engines": {
     "node": ">=18.0.0"

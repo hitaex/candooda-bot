@@ -87,14 +87,16 @@ async function handleRouletteSlash(interaction) {
 
   startingGuilds.add(guildId);
   let game;
+  let gameId;
+  let startAt;
   try {
     if (getGame(guildId)) {
       await interaction.editReply({ content: ':x: | يوجد جولة تعمل الان بالفعل' });
       return true;
     }
 
-    const gameId = Date.now();
-    const startAt = Math.floor((Date.now() + waitingTime * 1000) / 1000);
+    gameId = Date.now();
+    startAt = Math.floor((Date.now() + waitingTime * 1000) / 1000);
     game = createGame(guildId, gameId, channel.id, maxPlayers);
     const rows = buildLobbyRows(game.suffix, game);
 
