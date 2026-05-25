@@ -1,22 +1,23 @@
 FROM oraclelinux:9-slim
 
-# Install build tools and Node.js 18 from NodeSource
+# Install Bun and minimal build tools
 RUN microdnf -y update || true \
- && microdnf -y install curl make gcc-c++ python3 tar gzip gnupg || true \
- && curl -fsSL https://rpm.nodesource.com/setup_18.x | bash - \
- && yum -y install nodejs || dnf -y install nodejs || microdnf -y install nodejs || true \
- && npm --version || true \
- && yum clean all || true
+ && microdnf -y install curl tar gzip gnupg libstdc++ libgcc || true \
+ && curl -fsSL https://bun.sh/install | bash \
+ && export PATH="/root/.bun/bin:$PATH" \
+ && /root/.bun/bin/bun --version \
+ && microdnf clean all || true
 
+ENV PATH="/root/.bun/bin:$PATH"
 WORKDIR /app
 
 # Copy package files and install dependencies
 COPY package*.json ./
-RUN npm ci --only=production || npm install --only=production || true
+RUN bun install --production
 
 # Copy rest of the app
 COPY . .
 
 EXPOSE 3000
 
-CMD ["node", "index.js"]
+CMD ["bun", "index.js"]

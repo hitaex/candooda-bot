@@ -4,10 +4,11 @@
   "description": "Candooda Discord Moderation & Community Bot",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev":   "node --watch index.js",
-    "build:oracle": "bash build.sh"
-  }
+    "start": "bun index.js",
+    "dev":   "bun --watch index.js",
+    "build:oracle": "bash build.sh",
+    "install:bun": "bun install"
+  },
   "dependencies": {
     "discord.js":     "^14.14.1",
     "dotenv":         "^16.4.5",

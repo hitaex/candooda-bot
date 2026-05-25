@@ -16,7 +16,25 @@ If you clone this repository on an Oracle Linux instance, use the following comm
 ```bash
 cd candooda-bot
 bash build.sh
-npm start
+bun index.js
+```
+
+If you still want to use npm in legacy environments, the script will continue to install dependencies in `node_modules`, but Bun is the preferred runtime.
+
+### Bun support
+
+This repository now supports Bun as the runtime for the bot. The project scripts are configured to use Bun for startup and watch mode, and the Docker image builds Bun directly instead of Node.js.
+
+Use:
+
+```bash
+npm run start
+```
+
+or directly:
+
+```bash
+bun index.js
 ```
 
 `build.sh` will:
