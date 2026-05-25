@@ -6,5 +6,5 @@ module.exports = {
   ROOT:            path.join(__dirname, '../..'),
   BANNED_WORDS:    path.join(__dirname, '../../badwords.json'),
   WIN_POINTS:      path.join(__dirname, '../../win-points.json'),
-  UNO_GAMES:       path.join(__dirname, '../../uno-games.json'),
+  // UNO removed: UNO_GAMES path deleted
 };

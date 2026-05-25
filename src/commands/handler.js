@@ -17,22 +17,12 @@ const {
   reactionRoles, imprisonedUsers,
 } = require('../data/stores');
 const { handlePointsCommand } = require('../features/points/handler');
-const { handleUnoCommand } = require('../features/uno/handler');
-const { handleMinecraftCommand } = require('../features/minecraft/handler');
 
 async function handleSlashCommand(interaction) {
   const { commandName: cmd, guild, member } = interaction;
 
   if (cmd === 'points') {
     return handlePointsCommand(interaction);
-  }
-
-  if (cmd === 'uno') {
-    return handleUnoCommand(interaction);
-  }
-
-  if (cmd === 'minecraft') {
-    return handleMinecraftCommand(interaction);
   }
 
   // ─── /ping ───────────────────────────────────────────────────
@@ -63,7 +53,7 @@ async function handleSlashCommand(interaction) {
           { name: '⭐ Reaction Roles', value: '`/reaction-role` `/reaction-roles-list`' },
           { name: '📋 Info',         value: '`/user` `/server` `/avatar` `/banner` `/ping`' },
           { name: '🎲 Fun',          value: '`/8ball` `/coinflip` `/dice` `/poll`' },
-          { name: '🎴 UNO',          value: '`/uno start` `/uno join` `/uno begin` `/uno play` `/uno draw` `/uno hand` `/uno status` `/uno uno`' },
+          // UNO commands removed
           { name: '🎡 Roulette',     value: `\`${ROULETTE_CFG.slashRouletteNames.map(n => '/' + n).join('` `')}\` · stop: \`${ROULETTE_CFG.stopNames.join('` `')}\` · prefix: \`${ROULETTE_CFG.prefix}روليت\` \`${ROULETTE_CFG.prefix}ر\`` },
           { name: '📢 Announce',     value: '`announce:` — Title · body · footer · channel · tag · media (Administrator)' },
           { name: '🏆 Win Points',   value: '`/points show` · `leaderboard` · `add` · `remove` · `give` · `transfer`' },

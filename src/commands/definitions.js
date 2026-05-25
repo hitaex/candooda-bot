@@ -91,33 +91,7 @@ const commands = [
   new SlashCommandBuilder()
     .setName('help').setDescription('Show all commands'),
 
-  new SlashCommandBuilder()
-    .setName('minecraft').setDescription('Minecraft server utilities')
-    .addSubcommand(s => s.setName('status').setDescription('Check server status (ping)'))
-    .addSubcommand(s => s.setName('start').setDescription('Start the Aternos server'))
-    .addSubcommand(s => s.setName('stop').setDescription('Stop the Aternos server'))
-    .setDMPermission(false),
-
-  new SlashCommandBuilder()
-    .setName('uno').setDescription('Play UNO with friends')
-    .addSubcommand(s => s.setName('start').setDescription('Create a new UNO lobby'))
-    .addSubcommand(s => s.setName('join').setDescription('Join the current UNO lobby'))
-    .addSubcommand(s => s.setName('begin').setDescription('Begin the UNO game'))
-    .addSubcommand(s => s.setName('play').setDescription('Play a card')
-      .addStringOption(o => o.setName('card').setDescription('Card to play, e.g. R5, G+2, Bskip, W, W+4').setRequired(false))
-      .addStringOption(o => o.setName('color').setDescription('Color for wild cards').addChoices(
-        { name: 'red',   value: 'red' },
-        { name: 'green', value: 'green' },
-        { name: 'blue',  value: 'blue' },
-        { name: 'yellow',value: 'yellow' },
-      )))
-    .addSubcommand(s => s.setName('draw').setDescription('Draw a card'))
-    .addSubcommand(s => s.setName('hand').setDescription('View your current hand'))
-    .addSubcommand(s => s.setName('status').setDescription('View the current game status'))
-    .addSubcommand(s => s.setName('uno').setDescription('Declare UNO when you have one card'))
-    .addSubcommand(s => s.setName('leave').setDescription('Leave the current UNO game'))
-    .addSubcommand(s => s.setName('end').setDescription('End the current UNO game'))
-    .setDMPermission(false),
+  // UNO and Minecraft commands removed — only Roulette and core commands remain
 
   new SlashCommandBuilder()
     .setName('points').setDescription('Roulette win points')
